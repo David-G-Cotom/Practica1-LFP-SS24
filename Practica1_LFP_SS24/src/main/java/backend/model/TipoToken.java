@@ -10,6 +10,8 @@ package backend.model;
  */
 public enum TipoToken {
     
+    ID,
+    NUMBER,
     ERROR;
     
 }

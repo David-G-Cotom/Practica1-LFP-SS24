@@ -13,7 +13,7 @@ public enum Estado {
     S0,//Estado Inicial
     S1,
     S2,
-    S3,
+    //S3,
     
     /*
         MAS ESTADOS

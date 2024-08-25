@@ -12,11 +12,11 @@ public enum Alfabeto {
     
     NUMERO,
     LETRA,
-    SIMBOLO_MATEMATICO,
-    SIGNO_PUNTUACION,
-    SIMBOLO_VARIO,
-    ESPACIO,
+    //SIMBOLO_MATEMATICO,
+    //SIGNO_PUNTUACION,
+    //SIMBOLO_VARIO,
     NUEVA_LINEA,
+    ESPACIO,
     ERROR;
     
 }

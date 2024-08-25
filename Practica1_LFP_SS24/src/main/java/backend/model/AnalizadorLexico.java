@@ -28,6 +28,7 @@ public class AnalizadorLexico {
     private ControladorEstadoAceptacion estadoAceptacion;
 
     public AnalizadorLexico() {
+        this.funsionTransicion = new ControladorFunsionTransicion();
         this.isArchivoLeido = false;
         this.alfabetoControler = new ControladorAlfabeto();
         this.palabraTemporal = new StringBuilder();
@@ -79,9 +80,9 @@ public class AnalizadorLexico {
         this.ignorarEspaciosBlanco();
         this.palabraTemporal = new StringBuilder();
         Estado estadoActual = this.funsionTransicion.getESTADO_INICIAL();
-        char charActual = this.contenido.charAt(this.posicionContenido);
+        char charActual;
         Estado estadoTemporal = estadoActual;
-        Alfabeto alfabetoSimbolo = null;
+        Alfabeto alfabetoSimbolo;
         int lineaInicial = this.linea;
         int columnaInicial = this.columna;
         do {
@@ -101,7 +102,7 @@ public class AnalizadorLexico {
             if (estadoTemporal.equals(Estado.SE)) {
                 break;
             }
-        } while ((this.posicionContenido + 1) < this.contenido.length());
+        } while (this.posicionContenido < this.contenido.length());
         if (estadoTemporal.equals(Estado.SE)) {
             estadoActual = estadoTemporal;
         }

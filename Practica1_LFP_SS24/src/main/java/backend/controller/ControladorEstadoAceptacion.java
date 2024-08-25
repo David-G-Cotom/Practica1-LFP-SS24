@@ -18,6 +18,9 @@ public class ControladorEstadoAceptacion {
 
     public ControladorEstadoAceptacion() {
         this.mapaEstadoAceptacion = new HashMap<>();
+        this.mapaEstadoAceptacion.put(Estado.S1, TipoToken.ID);
+        this.mapaEstadoAceptacion.put(Estado.S2, TipoToken.NUMBER);
+        this.mapaEstadoAceptacion.put(Estado.SE, TipoToken.ERROR);
     }    
     
     public TipoToken getTipoToken(Estado estadoActual) {

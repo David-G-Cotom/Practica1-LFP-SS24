@@ -17,7 +17,21 @@ public class ControladorFunsionTransicion {
     private final Estado ESTADO_INICIAL = Estado.S0;
 
     public ControladorFunsionTransicion() {
-        matrizEstados = new Estado[Estado.values().length - 2][Alfabeto.values().length];        
+        matrizEstados = new Estado[Estado.values().length - 2][Alfabeto.values().length];
+        this.matrizEstados[Estado.S0.ordinal()][Alfabeto.LETRA.ordinal()]= Estado.S1;
+        this.matrizEstados[Estado.S0.ordinal()][Alfabeto.NUMERO.ordinal()]= Estado.S2;
+        this.matrizEstados[Estado.S0.ordinal()][Alfabeto.ESPACIO.ordinal()]= Estado.S0;
+        this.matrizEstados[Estado.S0.ordinal()][Alfabeto.ERROR.ordinal()]= Estado.SE;
+        
+        this.matrizEstados[Estado.S1.ordinal()][Alfabeto.LETRA.ordinal()]= Estado.S1;
+        this.matrizEstados[Estado.S1.ordinal()][Alfabeto.NUMERO.ordinal()]= Estado.S1;
+        this.matrizEstados[Estado.S1.ordinal()][Alfabeto.ESPACIO.ordinal()]= Estado.SF;
+        this.matrizEstados[Estado.S1.ordinal()][Alfabeto.ERROR.ordinal()]= Estado.SE;
+        
+        this.matrizEstados[Estado.S2.ordinal()][Alfabeto.LETRA.ordinal()]= Estado.SE;
+        this.matrizEstados[Estado.S2.ordinal()][Alfabeto.NUMERO.ordinal()]= Estado.S2;
+        this.matrizEstados[Estado.S2.ordinal()][Alfabeto.ESPACIO.ordinal()]= Estado.SF;
+        this.matrizEstados[Estado.S2.ordinal()][Alfabeto.ERROR.ordinal()]= Estado.SE;
     }        
     
     public Estado getESTADO_INICIAL() {
