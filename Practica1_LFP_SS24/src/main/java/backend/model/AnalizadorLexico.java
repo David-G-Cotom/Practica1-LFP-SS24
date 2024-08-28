@@ -8,8 +8,6 @@ import backend.controller.ControladorAlfabeto;
 import backend.controller.ControladorEstadoAceptacion;
 import backend.controller.ControladorFunsionTransicion;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  *
@@ -35,12 +33,8 @@ public class AnalizadorLexico {
         this.estadoAceptacion = new ControladorEstadoAceptacion();
     }
     
-    public boolean leerArchivo(String path) {
-        try {
-            this.contenido = new String(Files.readAllBytes(Paths.get(path)));
-        } catch (IOException ex) {
-            return false;
-        }
+    public boolean leerArchivo(String contenido) {
+        this.contenido = new String(contenido.getBytes());
         this.isArchivoLeido = true;
         this.linea = 0;
         this.columna = 0;
@@ -88,6 +82,9 @@ public class AnalizadorLexico {
         do {
             estadoActual = estadoTemporal;
             charActual = contenido.charAt(this.posicionContenido);
+            if (charActual == '\r') {
+                break;
+            }
             alfabetoSimbolo = this.alfabetoControler.getAlfabeto(charActual);
             estadoTemporal = this.funsionTransicion.produccion(estadoActual, alfabetoSimbolo);
             if (estadoTemporal.equals(Estado.SF)) {

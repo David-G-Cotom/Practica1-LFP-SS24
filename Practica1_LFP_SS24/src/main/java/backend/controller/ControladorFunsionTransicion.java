@@ -13,7 +13,7 @@ import backend.model.Estado;
  */
 public class ControladorFunsionTransicion {
 
-    private Estado[][] matrizEstados;
+    private final Estado[][] matrizEstados;
     private final Estado ESTADO_INICIAL = Estado.S0;
 
     public ControladorFunsionTransicion() {

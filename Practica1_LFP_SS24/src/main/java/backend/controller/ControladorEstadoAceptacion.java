@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class ControladorEstadoAceptacion {
 
-    private HashMap<Estado, TipoToken> mapaEstadoAceptacion;
+    private final HashMap<Estado, TipoToken> mapaEstadoAceptacion;
 
     public ControladorEstadoAceptacion() {
         this.mapaEstadoAceptacion = new HashMap<>();
@@ -37,9 +37,8 @@ public class ControladorEstadoAceptacion {
         this.mapaEstadoAceptacion.put(Estado.S20, TipoToken.PARENTESIS);
         this.mapaEstadoAceptacion.put(Estado.S21, TipoToken.LLAVE);
         this.mapaEstadoAceptacion.put(Estado.S22, TipoToken.CORCHETE);
-        this.mapaEstadoAceptacion.put(Estado.S23, TipoToken.COMA);
-        this.mapaEstadoAceptacion.put(Estado.S24, TipoToken.PUNTO);
-        //this.mapaEstadoAceptacion.put(Estado.S25, TipoToken.PALABRA_RESERVADA);
+        this.mapaEstadoAceptacion.put(Estado.S23, TipoToken.PUNTO);
+        this.mapaEstadoAceptacion.put(Estado.S24, TipoToken.COMA);
         this.mapaEstadoAceptacion.put(Estado.S28, TipoToken.SQUARE_SIMPLE);
         this.mapaEstadoAceptacion.put(Estado.S33, TipoToken.SQUARE_COMPLETO);        
         this.mapaEstadoAceptacion.put(Estado.SE, TipoToken.ERROR);

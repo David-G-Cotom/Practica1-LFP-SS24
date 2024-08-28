@@ -4,13 +4,16 @@
  */
 package frontend;
 
+import backend.model.AnalizadorLexico;
 import backend.model.Token;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -31,13 +34,18 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private int columnasCuadricula;
     private final DefaultTableModel modeloTabla;
     private ArrayList<Token> tokens;
-    
+    private AnalizadorLexico analizador;
+
     /**
      * Creates new form InterfazPrincipal
      */
     public InterfazPrincipal() {
         this.modeloTabla = new DefaultTableModel();
         initComponents();
+        this.btnEjecutar.setEnabled(false);
+        this.analizador = new AnalizadorLexico();
+        this.tokens = new ArrayList<>();
+        iniciarTablero();
     }
 
     /**
@@ -74,6 +82,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         dlgDimension.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         dlgDimension.setTitle("Dimension Cuadricula");
+        dlgDimension.setMinimumSize(new java.awt.Dimension(250, 200));
 
         jLabel3.setText("Filas:");
 
@@ -91,19 +100,20 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         dlgDimensionLayout.setHorizontalGroup(
             dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dlgDimensionLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
                 .addGroup(dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtColumnas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgDimensionLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnEstablecerDialog)
-                .addGap(57, 57, 57))
+                    .addGroup(dlgDimensionLayout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addGroup(dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtFilas)
+                            .addComponent(txtColumnas, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(dlgDimensionLayout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(btnEstablecerDialog)))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         dlgDimensionLayout.setVerticalGroup(
             dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,6 +133,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         dlgReporte.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         dlgReporte.setTitle("Reporte de Tokens");
+        dlgReporte.setMinimumSize(new java.awt.Dimension(900, 300));
 
         tblReporte.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -293,11 +304,16 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         jFileChooser1.setVisible(true);
         int resultado = jFileChooser1.showOpenDialog(this);
         if (resultado == JFileChooser.APPROVE_OPTION) {
-
+            try (BufferedReader reader = new BufferedReader(new FileReader(jFileChooser1.getSelectedFile()))) {
+                this.txaCodigo.read(reader, null);
+            } catch (IOException e) {
+                System.out.println("Error al imprimir el codigo");
+            }
         }
     }//GEN-LAST:event_btnCargarActionPerformed
 
     private void btnEstablecerDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerDimensionActionPerformed
+        this.dlgDimension.setLocationRelativeTo(this);
         this.dlgDimension.setVisible(true);
     }//GEN-LAST:event_btnEstablecerDimensionActionPerformed
 
@@ -309,7 +325,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 this.filasCuadricula = filas;
                 this.columnasCuadricula = columnas;
                 this.dlgDimension.dispose();
-                this.crearCuadricula();                
+                this.crearCuadricula();
             } else {
                 JOptionPane.showMessageDialog(this.dlgDimension, "Debe ingresar valores Enteros Positivos", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -319,8 +335,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEstablecerDialogActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
-        llenarTabla(this.tokens);
+        vaciarTabla();        
+        llenarTabla();
         this.dlgReporte.setVisible(true);
+        this.dlgReporte.setLocationRelativeTo(this);
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
@@ -346,6 +364,19 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExportarActionPerformed
 
     private void btnEjecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEjecutarActionPerformed
+        if (!this.tokens.isEmpty()) {
+            this.tokens.clear();
+        }
+        this.analizador.leerArchivo(this.txaCodigo.getText());
+        try {
+            while (!analizador.isFinArchivo()) {
+                Token token = analizador.getToken();
+                this.tokens.add(token);
+                System.out.println(token);
+            }
+        } catch (IOException ex) {
+            System.out.println("----------------ERROR---------------------");
+        }
         
     }//GEN-LAST:event_btnEjecutarActionPerformed
 
@@ -364,29 +395,58 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         this.pnlImagen.repaint();
         this.btnEjecutar.setEnabled(true);
     }
+
+    /**
+     * Metodo que le da a la Tabla de la interfaz el modelo adecuado para su
+     * visualizacion
+     */
+    private void iniciarTablero() {
+        this.tblReporte.setModel(modeloTabla);
+        this.modeloTabla.addColumn("Token");
+        this.modeloTabla.addColumn("Lexema");
+        this.modeloTabla.addColumn("Linea");
+        this.modeloTabla.addColumn("Columna");
+        this.modeloTabla.addColumn("Fila");
+        this.modeloTabla.addColumn("Col");
+        this.modeloTabla.addColumn("Color");
+    }
     
     /**
-     * Metodo que muestra en la Tabla de la interfaz los datos de cada Token
-     * que esta en el Array recibido como parametro
+     * Metodo que muestra en la Tabla de la interfaz los datos de cada Token que
+     * esta en el Array recibido como parametro
      *
      * @param datos son los datos de cada token registrados
      */
-    private void llenarTabla(ArrayList<Token> datos) {
+    private void llenarTabla() {
         this.tblReporte.setModel(modeloTabla);
         Object[] fila;
-        for (int i = 0; i < datos.size(); i++) {
+        for (int i = 0; i < this.tokens.size(); i++) {
             fila = new Object[7];
-            fila[0] = datos.get(i).getTipoToken();
-            fila[1] = datos.get(i).getLexema();
-            fila[2] = datos.get(i).getLinea();
-            fila[3] = datos.get(i).getColumna();
-            //fila[4] = datos.get(i).getSalarioCliente();
-            //fila[5] = datos.get(i).getDireccionCliente();
-            fila[6] = datos.get(i).getTipoToken().getColor();
+            fila[0] = this.tokens.get(i).getTipoToken();
+            fila[1] = this.tokens.get(i).getLexema();
+            fila[2] = this.tokens.get(i).getLinea();
+            fila[3] = this.tokens.get(i).getColumna();
+            fila[4] = this.tokens.get(i).getLinea();
+            fila[5] = this.tokens.get(i).getColumna();
+            fila[6] = this.tokens.get(i).getTipoToken().getColor();
             this.modeloTabla.addRow(fila);
         }
     }
     
+    /**
+     * Metodo que limpia la Tabla de la Interfaz para no tener problemas de
+     * colapsos
+     */
+    private void vaciarTabla() {
+        this.tblReporte.removeAll();
+        int filasTabla = this.modeloTabla.getRowCount();
+        if (filasTabla != 0) {
+            for (int i = 0; i < filasTabla; i++) {
+                this.modeloTabla.removeRow(0);
+            }
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargar;
     private javax.swing.JButton btnEjecutar;
