@@ -4,16 +4,39 @@
  */
 package frontend;
 
+import backend.model.Token;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Carlos Cotom
  */
 public class InterfazPrincipal extends javax.swing.JFrame {
 
+    private int filasCuadricula;
+    private int columnasCuadricula;
+    private final DefaultTableModel modeloTabla;
+    private ArrayList<Token> tokens;
+    
     /**
      * Creates new form InterfazPrincipal
      */
     public InterfazPrincipal() {
+        this.modeloTabla = new DefaultTableModel();
         initComponents();
     }
 
@@ -27,6 +50,15 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jFileChooser1 = new javax.swing.JFileChooser();
+        dlgDimension = new javax.swing.JDialog();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btnEstablecerDialog = new javax.swing.JButton();
+        txtFilas = new javax.swing.JTextField();
+        txtColumnas = new javax.swing.JTextField();
+        dlgReporte = new javax.swing.JDialog();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblReporte = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaCodigo = new javax.swing.JTextArea();
         pnlImagen = new javax.swing.JPanel();
@@ -36,6 +68,105 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         btnCargar = new javax.swing.JButton();
         lblFila = new javax.swing.JLabel();
         lblColumna = new javax.swing.JLabel();
+        btnEstablecerDimension = new javax.swing.JButton();
+        btnExportar = new javax.swing.JButton();
+        btnReporte = new javax.swing.JButton();
+
+        dlgDimension.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgDimension.setTitle("Dimension Cuadricula");
+
+        jLabel3.setText("Filas:");
+
+        jLabel4.setText("Columnas:");
+
+        btnEstablecerDialog.setText("Establecer");
+        btnEstablecerDialog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstablecerDialogActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout dlgDimensionLayout = new javax.swing.GroupLayout(dlgDimension.getContentPane());
+        dlgDimension.getContentPane().setLayout(dlgDimensionLayout);
+        dlgDimensionLayout.setHorizontalGroup(
+            dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgDimensionLayout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtColumnas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(32, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgDimensionLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEstablecerDialog)
+                .addGap(57, 57, 57))
+        );
+        dlgDimensionLayout.setVerticalGroup(
+            dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgDimensionLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(dlgDimensionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtColumnas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnEstablecerDialog)
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        dlgReporte.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgReporte.setTitle("Reporte de Tokens");
+
+        tblReporte.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Token", "Lexema", "Linea", "Columna", "Fila", "Col", "Color"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblReporte);
+        if (tblReporte.getColumnModel().getColumnCount() > 0) {
+            tblReporte.getColumnModel().getColumn(2).setPreferredWidth(20);
+            tblReporte.getColumnModel().getColumn(3).setPreferredWidth(20);
+            tblReporte.getColumnModel().getColumn(4).setPreferredWidth(20);
+            tblReporte.getColumnModel().getColumn(5).setPreferredWidth(20);
+        }
+
+        javax.swing.GroupLayout dlgReporteLayout = new javax.swing.GroupLayout(dlgReporte.getContentPane());
+        dlgReporte.getContentPane().setLayout(dlgReporteLayout);
+        dlgReporteLayout.setHorizontalGroup(
+            dlgReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgReporteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        dlgReporteLayout.setVerticalGroup(
+            dlgReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgReporteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Visual Basic");
@@ -46,19 +177,50 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txaCodigo);
 
         pnlImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        pnlImagen.setLayout(new java.awt.GridLayout());
+        pnlImagen.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel1.setText("Fila:");
 
         jLabel2.setText("Columna:");
 
         btnEjecutar.setText("Ejecutar");
+        btnEjecutar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEjecutarActionPerformed(evt);
+            }
+        });
 
         btnCargar.setText("Cargar Archivo");
+        btnCargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarActionPerformed(evt);
+            }
+        });
 
         lblFila.setText(".");
 
         lblColumna.setText(".");
+
+        btnEstablecerDimension.setText("Establecer Dimension");
+        btnEstablecerDimension.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstablecerDimensionActionPerformed(evt);
+            }
+        });
+
+        btnExportar.setText("Exportar Imagen");
+        btnExportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportarActionPerformed(evt);
+            }
+        });
+
+        btnReporte.setText("Reporte");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,35 +229,46 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(btnCargar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEjecutar)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblFila)
-                            .addComponent(lblColumna))))
-                .addGap(18, 18, 18)
-                .addComponent(pnlImagen, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblFila)
+                                    .addComponent(lblColumna)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnCargar)
+                        .addGap(116, 116, 116)
+                        .addComponent(btnEjecutar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnReporte)
+                        .addGap(3, 3, 3)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnlImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnExportar)
+                        .addGap(121, 121, 121)
+                        .addComponent(btnEstablecerDimension)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCargar)
+                    .addComponent(btnEjecutar)
+                    .addComponent(btnEstablecerDimension)
+                    .addComponent(btnExportar)
+                    .addComponent(btnReporte))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCargar)
-                            .addComponent(btnEjecutar))
-                        .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -105,23 +278,137 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(lblColumna))
-                        .addGap(0, 29, Short.MAX_VALUE)))
+                        .addGap(0, 29, Short.MAX_VALUE))
+                    .addComponent(pnlImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarActionPerformed
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.txt", "txt");
+        jFileChooser1.setFileFilter(filtro);
+        jFileChooser1.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        jFileChooser1.setVisible(true);
+        int resultado = jFileChooser1.showOpenDialog(this);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+
+        }
+    }//GEN-LAST:event_btnCargarActionPerformed
+
+    private void btnEstablecerDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerDimensionActionPerformed
+        this.dlgDimension.setVisible(true);
+    }//GEN-LAST:event_btnEstablecerDimensionActionPerformed
+
+    private void btnEstablecerDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerDialogActionPerformed
+        try {
+            int filas = Integer.parseInt(this.txtFilas.getText());
+            int columnas = Integer.parseInt(this.txtColumnas.getText());
+            if ((filas > 0) && (columnas > 0)) {
+                this.filasCuadricula = filas;
+                this.columnasCuadricula = columnas;
+                this.dlgDimension.dispose();
+                this.crearCuadricula();                
+            } else {
+                JOptionPane.showMessageDialog(this.dlgDimension, "Debe ingresar valores Enteros Positivos", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this.dlgDimension, "Debe Numeros Enteros Positivos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEstablecerDialogActionPerformed
+
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        llenarTabla(this.tokens);
+        this.dlgReporte.setVisible(true);
+    }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
+        try {
+            BufferedImage imagen = new BufferedImage(this.pnlImagen.getWidth(), this.pnlImagen.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D imagen2D = imagen.createGraphics();
+            this.pnlImagen.paint(imagen2D);
+            imagen2D.dispose();
+            String nombreBase = "imagen";
+            String extensionImagen = ".png";
+            File file = new File(nombreBase + extensionImagen);
+            int version = 1;
+            while (file.exists()) {
+                nombreBase = nombreBase + " " + version;
+                file = new File(nombreBase + extensionImagen);
+                version++;
+            }
+            ImageIO.write(imagen, "png", file);
+            JOptionPane.showMessageDialog(this, "Imagen Exportada Exitosamente como " + nombreBase + extensionImagen);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al Exportar la Imagen", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnExportarActionPerformed
+
+    private void btnEjecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEjecutarActionPerformed
+        
+    }//GEN-LAST:event_btnEjecutarActionPerformed
+
+    private void crearCuadricula() {
+        this.pnlImagen.removeAll();
+        this.pnlImagen.setLayout(new GridLayout(this.filasCuadricula, this.columnasCuadricula, 1, 1));
+        int anchoCasilla = this.pnlImagen.getWidth() / this.columnasCuadricula;
+        int altoCasilla = this.pnlImagen.getHeight() / this.filasCuadricula;
+        for (int i = 0; i < (this.filasCuadricula * this.columnasCuadricula); i++) {
+            JLabel casilla = new JLabel();
+            casilla.setPreferredSize(new Dimension(anchoCasilla, altoCasilla));
+            casilla.setBorder(BorderFactory.createLineBorder(Color.black));
+            this.pnlImagen.add(casilla);
+        }
+        this.pnlImagen.revalidate();
+        this.pnlImagen.repaint();
+        this.btnEjecutar.setEnabled(true);
+    }
+    
+    /**
+     * Metodo que muestra en la Tabla de la interfaz los datos de cada Token
+     * que esta en el Array recibido como parametro
+     *
+     * @param datos son los datos de cada token registrados
+     */
+    private void llenarTabla(ArrayList<Token> datos) {
+        this.tblReporte.setModel(modeloTabla);
+        Object[] fila;
+        for (int i = 0; i < datos.size(); i++) {
+            fila = new Object[7];
+            fila[0] = datos.get(i).getTipoToken();
+            fila[1] = datos.get(i).getLexema();
+            fila[2] = datos.get(i).getLinea();
+            fila[3] = datos.get(i).getColumna();
+            //fila[4] = datos.get(i).getSalarioCliente();
+            //fila[5] = datos.get(i).getDireccionCliente();
+            fila[6] = datos.get(i).getTipoToken().getColor();
+            this.modeloTabla.addRow(fila);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargar;
     private javax.swing.JButton btnEjecutar;
+    private javax.swing.JButton btnEstablecerDialog;
+    private javax.swing.JButton btnEstablecerDimension;
+    private javax.swing.JButton btnExportar;
+    private javax.swing.JButton btnReporte;
+    private javax.swing.JDialog dlgDimension;
+    private javax.swing.JDialog dlgReporte;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblColumna;
     private javax.swing.JLabel lblFila;
     private javax.swing.JPanel pnlImagen;
+    private javax.swing.JTable tblReporte;
     private javax.swing.JTextArea txaCodigo;
+    private javax.swing.JTextField txtColumnas;
+    private javax.swing.JTextField txtFilas;
     // End of variables declaration//GEN-END:variables
 }

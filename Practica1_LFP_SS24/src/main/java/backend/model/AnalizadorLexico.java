@@ -105,8 +105,62 @@ public class AnalizadorLexico {
         } while (this.posicionContenido < this.contenido.length());
         if (estadoTemporal.equals(Estado.SE)) {
             estadoActual = estadoTemporal;
+        }        
+        if (revisarIdentificador(this.palabraTemporal.toString()) != null) {
+            return new Token(revisarIdentificador(this.palabraTemporal.toString()), lineaInicial, columnaInicial, this.palabraTemporal.toString());
+        }
+        if (revisatAritmetico(this.palabraTemporal.toString()) != null) {
+            return new Token(revisatAritmetico(this.palabraTemporal.toString()), lineaInicial, columnaInicial, this.palabraTemporal.toString());
+        }
+        if (revisarReservadaEspecial(this.palabraTemporal.toString()) != null) {
+            return new Token(revisarReservadaEspecial(this.palabraTemporal.toString()), lineaInicial, columnaInicial, this.palabraTemporal.toString());
         }
         return new Token(this.estadoAceptacion.getTipoToken(estadoActual), lineaInicial, columnaInicial, this.palabraTemporal.toString());
+    }
+    
+    private TipoToken revisarIdentificador(String palabra) {        
+        switch (palabra) {
+            case "Mod":
+                return TipoToken.MODULO;                
+            case "And":
+                return TipoToken.AND;                
+            case "Or":
+                return TipoToken.OR;                
+            case "Not":
+                return TipoToken.NOT;                
+            case "Module": case "End": case "Sub": case "Main": case "Dim": case "As": case "Integer": case "String":
+            case "Boolean": case "Double": case "Char": case "If": case "ElseIf": case "Else": case "Then": case "While":
+            case "Do": case "Loop": case "For": case "To": case "Next": case "Function": case "Return": case "Const":
+                return TipoToken.PALABRA_RESERVADA;
+            case "True": case "False":
+            return TipoToken.BOOLEANO;
+            default:
+                return null;
+        }        
+    }
+    
+    private TipoToken revisatAritmetico(String signo) {
+        switch (signo) {
+            case "+":
+                return TipoToken.SUMA;                
+            case "-":
+                return TipoToken.RESTA;                
+            case "*":
+                return TipoToken.MULTIPLICACION;                
+            case "/":
+                return TipoToken.DIVISION;
+            default:
+                return null;
+        }
+    }
+    
+    private TipoToken revisarReservadaEspecial(String palabraEspecial) {
+        switch (palabraEspecial) {
+            case "Console.WriteLine": case "Console.ReadLine":
+                return TipoToken.PALABRA_RESERVADA;
+            default:
+                return null;
+        }
     }
     
 }

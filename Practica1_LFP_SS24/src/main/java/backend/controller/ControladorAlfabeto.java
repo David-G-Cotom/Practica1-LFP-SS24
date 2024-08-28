@@ -26,18 +26,40 @@ public class ControladorAlfabeto {
             return Alfabeto.LETRA;
         } else if ((valor >= 48) && (valor <= 57)) {
             return Alfabeto.NUMERO;        
-        } else if ((valor == 32) || (charAt == ' ')) {
-            return Alfabeto.ESPACIO;
+        } else if (charAt == '_') {
+            return Alfabeto.SUBRAYADO;
+        } else if (valor == '+' || valor == '-' || valor == '*' || valor == '/') {
+            return Alfabeto.SIMBOLO_ARITMETICO;
+        } else if (charAt == '^') {
+            return Alfabeto.EXPONENTE;
+        } else if (charAt == '=') {
+            return Alfabeto.IGUAL;
+        } else if (charAt == '<') {
+            return Alfabeto.MENOR_QUE;
+        } else if (charAt == '>') {
+            return Alfabeto.MAYOR_QUE;
+        } else if (charAt == '.') {
+            return Alfabeto.PUNTO;
+        } else if (charAt == ',') {
+            return Alfabeto.COMA;
+        } else if (charAt == '"') {
+            return Alfabeto.COMILLA_DOBLE;
+        } else if (charAt == '\'') {
+            return Alfabeto.COMILLA_SIMPLE;
+        } else if (charAt == '(' || charAt == ')') {
+            return Alfabeto.PARENTESIS;
+        } else if (charAt == '{' || charAt == '}') {
+            return Alfabeto.LLAVES;
+        } else if (charAt == '[' || charAt == ']') {
+            return Alfabeto.CORCHETES;
+        } else if (charAt == '#') {
+            return Alfabeto.NUMERAL;
+        } else if ((valor >= 33) && (valor <= 126)) {
+            return Alfabeto.SIMBOLO_VARIO;
         } else if ((charAt == '\n')) {
             return Alfabeto.NUEVA_LINEA;
-        /*} else if (valor == 42 || valor == 43 || valor == 45 || valor == 47
-                || valor == 60 || valor == 61 || valor == 62 || valor == 94) {
-            return Alfabeto.SIMBOLO_MATEMATICO;        
-        } else if (valor == 39 || valor == 40 || valor == 41 || valor == 44 || valor == 46
-                || valor == 91 || valor == 93 || valor == 123 || valor == 125) {
-            return Alfabeto.SIGNO_PUNTUACION;        
-        } else if ((valor >= 35) && (valor <= 38)) {
-            return Alfabeto.SIMBOLO_VARIO;*/
+        } else if ((valor == 32) || (charAt == ' ')) {
+            return Alfabeto.ESPACIO;
         } else {
             return Alfabeto.ERROR;            
         }   
