@@ -5,6 +5,7 @@
 package frontend;
 
 import backend.model.AnalizadorLexico;
+import backend.model.TipoToken;
 import backend.model.Token;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -377,7 +378,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         } catch (IOException ex) {
             System.out.println("----------------ERROR---------------------");
         }
-        
+        crearCuadricula();
+        if (!this.tokens.isEmpty()) {
+            pintarCuadricula();            
+        }
     }//GEN-LAST:event_btnEjecutarActionPerformed
 
     private void crearCuadricula() {
@@ -396,6 +400,49 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         this.btnEjecutar.setEnabled(true);
     }
 
+    private void pintarCuadricula() {
+        int tokensValidos = 0;
+        for (int i = 0; i < this.tokens.size(); i++) {
+            if (this.tokens.get(i).getTipoToken() != TipoToken.ERROR) {
+                tokensValidos++;
+            }
+        }
+        if ((this.filasCuadricula * this.columnasCuadricula) < tokensValidos) {
+            JOptionPane.showMessageDialog(this, "Se necesita mas cuadricula para poder Pintar la Imagen", "Error!!!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        crearCuadricula();
+        int filaActual = 1;
+        int columnaActual = 1;
+        int indiceToken = 0;
+        for (int i = 0; i < (this.filasCuadricula * this.columnasCuadricula); i++) {
+            if ((columnaActual - 1) == this.columnasCuadricula) {
+                columnaActual = 1;
+                filaActual++;
+            }
+            if (i == tokensValidos) {
+                break;
+            }
+            if (this.tokens.get(indiceToken).getTipoToken() == TipoToken.ERROR) {
+                columnaActual++;
+                indiceToken++;
+                continue;
+            }
+            try {
+                JLabel casilla = (JLabel) this.pnlImagen.getComponent(i);
+                casilla.setBackground(Color.decode(this.tokens.get(indiceToken).getTipoToken().getColor()));
+                casilla.setBorder(null);
+                casilla.setOpaque(true);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println(e);
+            }
+            columnaActual++;
+            indiceToken++;
+        }
+        this.pnlImagen.revalidate();
+        this.pnlImagen.repaint();
+    }
+    
     /**
      * Metodo que le da a la Tabla de la interfaz el modelo adecuado para su
      * visualizacion
@@ -426,8 +473,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             fila[1] = this.tokens.get(i).getLexema();
             fila[2] = this.tokens.get(i).getLinea();
             fila[3] = this.tokens.get(i).getColumna();
-            fila[4] = this.tokens.get(i).getLinea();
-            fila[5] = this.tokens.get(i).getColumna();
+            //fila[4] = this.tokens.get(i).getLinea();
+            //fila[5] = this.tokens.get(i).getColumna();
             fila[6] = this.tokens.get(i).getTipoToken().getColor();
             this.modeloTabla.addRow(fila);
         }
@@ -445,7 +492,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 this.modeloTabla.removeRow(0);
             }
         }
-    }
+    }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargar;
