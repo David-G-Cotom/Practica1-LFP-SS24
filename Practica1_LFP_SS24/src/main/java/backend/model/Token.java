@@ -14,6 +14,8 @@ public class Token {
     private int linea;
     private int columna;
     private String lexema;
+    private int filaImagen;
+    private int columnaImagen;
     
     public Token(TipoToken tipoToken, int linea, int columna, String lexema) {
         this.tipoToken = tipoToken;
@@ -52,7 +54,23 @@ public class Token {
 
     public void setLexema(String lexema) {
         this.lexema = lexema;
-    }   
+    }
+
+    public int getFilaImagen() {
+        return filaImagen;
+    }
+
+    public void setFilaImagen(int filaImagen) {
+        this.filaImagen = filaImagen;
+    }
+
+    public int getColumnaImagen() {
+        return columnaImagen;
+    }
+
+    public void setColumnaImagen(int columnaImagen) {
+        this.columnaImagen = columnaImagen;
+    }
 
     @Override
     public String toString() {

@@ -197,23 +197,35 @@ public class ControladorFunsionTransicion {
         this.matrizEstados[Estado.S25.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.SF;
 
         this.matrizEstados[Estado.S26.ordinal()][Alfabeto.NUMERAL.ordinal()] = Estado.S27;
+        this.matrizEstados[Estado.S26.ordinal()][Alfabeto.NUEVA_LINEA.ordinal()] = Estado.SE;
+        this.matrizEstados[Estado.S26.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.S26;
 
         this.matrizEstados[Estado.S27.ordinal()][Alfabeto.LETRA.ordinal()] = Estado.S27;
         this.matrizEstados[Estado.S27.ordinal()][Alfabeto.NUMERO.ordinal()] = Estado.S27;
         this.matrizEstados[Estado.S27.ordinal()][Alfabeto.COMA.ordinal()] = Estado.S29;
         this.matrizEstados[Estado.S27.ordinal()][Alfabeto.PARENTESIS.ordinal()] = Estado.S28;
+        this.matrizEstados[Estado.S27.ordinal()][Alfabeto.NUEVA_LINEA.ordinal()] = Estado.SE;
+        this.matrizEstados[Estado.S27.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.SE;
 
         this.matrizEstados[Estado.S28.ordinal()][Alfabeto.NUEVA_LINEA.ordinal()] = Estado.SF;
         this.matrizEstados[Estado.S28.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.SF;
 
         this.matrizEstados[Estado.S29.ordinal()][Alfabeto.NUMERO.ordinal()] = Estado.S30;
-
+        this.matrizEstados[Estado.S29.ordinal()][Alfabeto.NUEVA_LINEA.ordinal()] = Estado.SE;
+        this.matrizEstados[Estado.S29.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.S29;
+        
         this.matrizEstados[Estado.S30.ordinal()][Alfabeto.COMA.ordinal()] = Estado.S31;
-
+        this.matrizEstados[Estado.S30.ordinal()][Alfabeto.NUEVA_LINEA.ordinal()] = Estado.SE;
+        this.matrizEstados[Estado.S30.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.S30;
+        
         this.matrizEstados[Estado.S31.ordinal()][Alfabeto.NUMERO.ordinal()] = Estado.S32;
-
+        this.matrizEstados[Estado.S31.ordinal()][Alfabeto.NUEVA_LINEA.ordinal()] = Estado.SE;
+        this.matrizEstados[Estado.S31.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.S31;
+        
         this.matrizEstados[Estado.S32.ordinal()][Alfabeto.PARENTESIS.ordinal()] = Estado.S33;
-
+        this.matrizEstados[Estado.S32.ordinal()][Alfabeto.NUEVA_LINEA.ordinal()] = Estado.SE;
+        this.matrizEstados[Estado.S32.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.S32;
+        
         this.matrizEstados[Estado.S33.ordinal()][Alfabeto.NUEVA_LINEA.ordinal()] = Estado.SF;
         this.matrizEstados[Estado.S33.ordinal()][Alfabeto.ESPACIO.ordinal()] = Estado.SF;
 

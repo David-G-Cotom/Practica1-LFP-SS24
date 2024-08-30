@@ -242,30 +242,31 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblFila)
-                                    .addComponent(lblColumna)))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCargar)
                         .addGap(116, 116, 116)
                         .addComponent(btnEjecutar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnReporte)
-                        .addGap(3, 3, 3)))
+                        .addGap(0, 0, 0))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(31, 31, 31)
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblFila))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblColumna)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnlImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnExportar)
                         .addGap(121, 121, 121)
-                        .addComponent(btnEstablecerDimension)))
+                        .addComponent(btnEstablecerDimension))
+                    .addComponent(pnlImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -289,10 +290,9 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(lblColumna))
-                        .addGap(0, 29, Short.MAX_VALUE))
-                    .addComponent(pnlImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                            .addComponent(lblColumna)))
+                    .addComponent(pnlImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -423,9 +423,9 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             if (i == tokensValidos) {
                 break;
             }
-            if (this.tokens.get(indiceToken).getTipoToken() == TipoToken.ERROR) {
-                columnaActual++;
+            if (this.tokens.get(indiceToken).getTipoToken() == TipoToken.ERROR) {                
                 indiceToken++;
+                i--;
                 continue;
             }
             try {
@@ -433,6 +433,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 casilla.setBackground(Color.decode(this.tokens.get(indiceToken).getTipoToken().getColor()));
                 casilla.setBorder(null);
                 casilla.setOpaque(true);
+                this.tokens.get(indiceToken).setFilaImagen(filaActual);
+                this.tokens.get(indiceToken).setColumnaImagen(columnaActual);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println(e);
             }
@@ -473,8 +475,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             fila[1] = this.tokens.get(i).getLexema();
             fila[2] = this.tokens.get(i).getLinea();
             fila[3] = this.tokens.get(i).getColumna();
-            //fila[4] = this.tokens.get(i).getLinea();
-            //fila[5] = this.tokens.get(i).getColumna();
+            fila[4] = this.tokens.get(i).getFilaImagen();
+            fila[5] = this.tokens.get(i).getColumnaImagen();
             fila[6] = this.tokens.get(i).getTipoToken().getColor();
             this.modeloTabla.addRow(fila);
         }

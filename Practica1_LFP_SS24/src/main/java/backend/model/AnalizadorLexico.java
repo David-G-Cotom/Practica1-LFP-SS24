@@ -33,13 +33,12 @@ public class AnalizadorLexico {
         this.estadoAceptacion = new ControladorEstadoAceptacion();
     }
     
-    public boolean leerArchivo(String contenido) {
+    public void leerArchivo(String contenido) {
         this.contenido = new String(contenido.getBytes());
         this.isArchivoLeido = true;
         this.linea = 0;
         this.columna = 0;
         this.posicionContenido = 0;
-        return true;
     }
     
     public boolean isFinArchivo() throws IOException {
@@ -111,6 +110,10 @@ public class AnalizadorLexico {
         }
         if (revisarReservadaEspecial(this.palabraTemporal.toString()) != null) {
             return new Token(revisarReservadaEspecial(this.palabraTemporal.toString()), lineaInicial, columnaInicial, this.palabraTemporal.toString());
+        }
+        if (((this.palabraTemporal.length() == 1) && (this.posicionContenido == this.contenido.length())) || (estadoTemporal == Estado.S12)
+                || (estadoTemporal == Estado.S5) || (estadoTemporal == Estado.S8) || (estadoTemporal == Estado.S28) || (estadoTemporal == Estado.S33)) {
+            return new Token(this.estadoAceptacion.getTipoToken(estadoTemporal), lineaInicial, columnaInicial, this.palabraTemporal.toString());
         }
         return new Token(this.estadoAceptacion.getTipoToken(estadoActual), lineaInicial, columnaInicial, this.palabraTemporal.toString());
     }
