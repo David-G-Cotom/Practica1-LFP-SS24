@@ -71,12 +71,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txaCodigo = new javax.swing.JTextArea();
         pnlImagen = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         btnEjecutar = new javax.swing.JButton();
         btnCargar = new javax.swing.JButton();
-        lblFila = new javax.swing.JLabel();
-        lblColumna = new javax.swing.JLabel();
         btnEstablecerDimension = new javax.swing.JButton();
         btnExportar = new javax.swing.JButton();
         btnReporte = new javax.swing.JButton();
@@ -191,10 +187,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         pnlImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         pnlImagen.setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabel1.setText("Fila:");
-
-        jLabel2.setText("Columna:");
-
         btnEjecutar.setText("Ejecutar");
         btnEjecutar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,10 +200,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 btnCargarActionPerformed(evt);
             }
         });
-
-        lblFila.setText(".");
-
-        lblColumna.setText(".");
 
         btnEstablecerDimension.setText("Establecer Dimension");
         btnEstablecerDimension.addActionListener(new java.awt.event.ActionListener() {
@@ -246,20 +234,9 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                         .addGap(116, 116, 116)
                         .addComponent(btnEjecutar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnReporte)
-                        .addGap(0, 0, 0))
+                        .addComponent(btnReporte))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblFila))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblColumna)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -280,24 +257,16 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                     .addComponent(btnExportar)
                     .addComponent(btnReporte))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(lblFila))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(lblColumna)))
-                    .addComponent(pnlImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlImagen, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //---------------------------------------- METODOS DE EVENTO ----------------------------------------//
     private void btnCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarActionPerformed
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.txt", "txt");
         jFileChooser1.setFileFilter(filtro);
@@ -331,12 +300,12 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this.dlgDimension, "Debe ingresar valores Enteros Positivos", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this.dlgDimension, "Debe Numeros Enteros Positivos", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.dlgDimension, "Debe Ingresar Numeros Enteros Positivos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEstablecerDialogActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
-        vaciarTabla();        
+        vaciarTabla();
         llenarTabla();
         this.dlgReporte.setVisible(true);
         this.dlgReporte.setLocationRelativeTo(this);
@@ -380,10 +349,16 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         }
         crearCuadricula();
         if (!this.tokens.isEmpty()) {
-            pintarCuadricula();            
+            pintarCuadricula();
         }
+        System.out.println();
     }//GEN-LAST:event_btnEjecutarActionPerformed
 
+    //---------------------------------------- METODOS PROPIOS ----------------------------------------//
+    /**
+     * Metodo que establece el Layout que tendra el Panel para el Lienzo de la
+     * Imagen
+     */
     private void crearCuadricula() {
         this.pnlImagen.removeAll();
         this.pnlImagen.setLayout(new GridLayout(this.filasCuadricula, this.columnasCuadricula, 1, 1));
@@ -400,6 +375,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         this.btnEjecutar.setEnabled(true);
     }
 
+    /**
+     * Metodo que Imprime el Color en el Panel segun el Color correspondiente a
+     * cada Token analizado
+     */
     private void pintarCuadricula() {
         int tokensValidos = 0;
         for (int i = 0; i < this.tokens.size(); i++) {
@@ -423,18 +402,33 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             if (i == tokensValidos) {
                 break;
             }
-            if (this.tokens.get(indiceToken).getTipoToken() == TipoToken.ERROR) {                
+            if (this.tokens.get(indiceToken).getTipoToken() == TipoToken.ERROR) {
                 indiceToken++;
                 i--;
                 continue;
             }
+            if (this.tokens.get(indiceToken).getTipoToken() == TipoToken.SQUARE_SIMPLE) {
+                String contenido = new String(this.tokens.get(indiceToken).getLexema().getBytes());
+                String color = evaluarSquareSimple(contenido);
+                this.tokens.get(indiceToken).getTipoToken().setColor(color);
+            }
             try {
                 JLabel casilla = (JLabel) this.pnlImagen.getComponent(i);
-                casilla.setBackground(Color.decode(this.tokens.get(indiceToken).getTipoToken().getColor()));
+                try {
+                    casilla.setBackground(Color.decode(this.tokens.get(indiceToken).getTipoToken().getColor()));                    
+                } catch (NumberFormatException e) {
+                    tokensValidos--;
+                    indiceToken++;
+                    i--;
+                    System.out.println("Color No valido en el Square.Color");
+                    continue;
+                }
                 casilla.setBorder(null);
                 casilla.setOpaque(true);
                 this.tokens.get(indiceToken).setFilaImagen(filaActual);
                 this.tokens.get(indiceToken).setColumnaImagen(columnaActual);
+                CasillaLabel label = new CasillaLabel(casilla);
+                label.setToken(this.tokens.get(indiceToken));
             } catch (IndexOutOfBoundsException e) {
                 System.out.println(e);
             }
@@ -444,10 +438,32 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         this.pnlImagen.revalidate();
         this.pnlImagen.repaint();
     }
+
+    private String evaluarSquareSimple(String contenido) {
+        char charActual;
+        StringBuilder color = new StringBuilder();
+        int posicionContenido = -1;       
+        do {
+            posicionContenido++;
+            charActual = contenido.charAt(posicionContenido);            
+            if (charActual == '#' || charActual == ')') {
+                for (int i = 0; i < 7; i++) {
+                    color.append(charActual);
+                    posicionContenido++;
+                    if (posicionContenido >= contenido.length()) {
+                        break;
+                    }
+                    charActual = contenido.charAt(posicionContenido);
+                }
+                break;
+            }
+        } while (posicionContenido < contenido.length());
+        return color.toString();
+    }
     
     /**
-     * Metodo que le da a la Tabla de la interfaz el modelo adecuado para su
-     * visualizacion
+     * Metodo que le da a la Tabla de Reporte en la interfaz el modelo adecuado
+     * para su visualizacion
      */
     private void iniciarTablero() {
         this.tblReporte.setModel(modeloTabla);
@@ -459,10 +475,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         this.modeloTabla.addColumn("Col");
         this.modeloTabla.addColumn("Color");
     }
-    
+
     /**
-     * Metodo que muestra en la Tabla de la interfaz los datos de cada Token que
-     * esta en el Array recibido como parametro
+     * Metodo que muestra en la Tabla de Reporte en la interfaz los datos de
+     * cada Token que esta se encontro en el analisis
      *
      * @param datos son los datos de cada token registrados
      */
@@ -481,10 +497,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             this.modeloTabla.addRow(fila);
         }
     }
-    
+
     /**
-     * Metodo que limpia la Tabla de la Interfaz para no tener problemas de
-     * colapsos
+     * Metodo que limpia la Tabla de Reporte en la Interfaz para no tener
+     * problemas de colapsos
      */
     private void vaciarTabla() {
         this.tblReporte.removeAll();
@@ -494,7 +510,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 this.modeloTabla.removeRow(0);
             }
         }
-    }    
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargar;
@@ -506,14 +522,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JDialog dlgDimension;
     private javax.swing.JDialog dlgReporte;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblColumna;
-    private javax.swing.JLabel lblFila;
     private javax.swing.JPanel pnlImagen;
     private javax.swing.JTable tblReporte;
     private javax.swing.JTextArea txaCodigo;

@@ -110,7 +110,7 @@ public class AnalizadorLexico {
         }
         if (revisarReservadaEspecial(this.palabraTemporal.toString()) != null) {
             return new Token(revisarReservadaEspecial(this.palabraTemporal.toString()), lineaInicial, columnaInicial, this.palabraTemporal.toString());
-        }
+        }        
         if (((this.palabraTemporal.length() == 1) && (this.posicionContenido == this.contenido.length())) || (estadoTemporal == Estado.S12)
                 || (estadoTemporal == Estado.S5) || (estadoTemporal == Estado.S8) || (estadoTemporal == Estado.S28) || (estadoTemporal == Estado.S33)) {
             return new Token(this.estadoAceptacion.getTipoToken(estadoTemporal), lineaInicial, columnaInicial, this.palabraTemporal.toString());
